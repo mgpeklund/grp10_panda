@@ -54,14 +54,19 @@ grp10_package/CMakeFiles/panda_controller.dir/src/panda_controller.cpp.o
  /opt/ros/kinetic/include/moveit/collision_plugin_loader/collision_plugin_loader.h
  /opt/ros/kinetic/include/moveit/exceptions/exceptions.h
  /opt/ros/kinetic/include/moveit/kinematic_constraints/kinematic_constraint.h
+ /opt/ros/kinetic/include/moveit/kinematic_constraints/utils.h
  /opt/ros/kinetic/include/moveit/kinematics_base/kinematics_base.h
  /opt/ros/kinetic/include/moveit/kinematics_plugin_loader/kinematics_plugin_loader.h
  /opt/ros/kinetic/include/moveit/macros/class_forward.h
  /opt/ros/kinetic/include/moveit/macros/declare_ptr.h
  /opt/ros/kinetic/include/moveit/macros/deprecation.h
+ /opt/ros/kinetic/include/moveit/move_group_interface/move_group_interface.h
  /opt/ros/kinetic/include/moveit/occupancy_map_monitor/occupancy_map.h
  /opt/ros/kinetic/include/moveit/occupancy_map_monitor/occupancy_map_monitor.h
  /opt/ros/kinetic/include/moveit/occupancy_map_monitor/occupancy_map_updater.h
+ /opt/ros/kinetic/include/moveit/planning_interface/planning_interface.h
+ /opt/ros/kinetic/include/moveit/planning_interface/planning_request.h
+ /opt/ros/kinetic/include/moveit/planning_interface/planning_response.h
  /opt/ros/kinetic/include/moveit/planning_scene/planning_scene.h
  /opt/ros/kinetic/include/moveit/planning_scene_monitor/current_state_monitor.h
  /opt/ros/kinetic/include/moveit/planning_scene_monitor/planning_scene_monitor.h
@@ -94,6 +99,7 @@ grp10_package/CMakeFiles/panda_controller.dir/src/panda_controller.cpp.o
  /opt/ros/kinetic/include/moveit_msgs/ContactInformation.h
  /opt/ros/kinetic/include/moveit_msgs/CostSource.h
  /opt/ros/kinetic/include/moveit_msgs/DisplayRobotState.h
+ /opt/ros/kinetic/include/moveit_msgs/DisplayTrajectory.h
  /opt/ros/kinetic/include/moveit_msgs/GetStateValidity.h
  /opt/ros/kinetic/include/moveit_msgs/GetStateValidityRequest.h
  /opt/ros/kinetic/include/moveit_msgs/GetStateValidityResponse.h
@@ -106,9 +112,14 @@ grp10_package/CMakeFiles/panda_controller.dir/src/panda_controller.cpp.o
  /opt/ros/kinetic/include/moveit_msgs/LoadMap.h
  /opt/ros/kinetic/include/moveit_msgs/LoadMapRequest.h
  /opt/ros/kinetic/include/moveit_msgs/LoadMapResponse.h
+ /opt/ros/kinetic/include/moveit_msgs/MotionPlanDetailedResponse.h
+ /opt/ros/kinetic/include/moveit_msgs/MotionPlanRequest.h
+ /opt/ros/kinetic/include/moveit_msgs/MotionPlanResponse.h
  /opt/ros/kinetic/include/moveit_msgs/MoveItErrorCodes.h
  /opt/ros/kinetic/include/moveit_msgs/ObjectColor.h
  /opt/ros/kinetic/include/moveit_msgs/OrientationConstraint.h
+ /opt/ros/kinetic/include/moveit_msgs/PlaceLocation.h
+ /opt/ros/kinetic/include/moveit_msgs/PlannerInterfaceDescription.h
  /opt/ros/kinetic/include/moveit_msgs/PlanningScene.h
  /opt/ros/kinetic/include/moveit_msgs/PlanningSceneComponents.h
  /opt/ros/kinetic/include/moveit_msgs/PlanningSceneWorld.h
@@ -118,6 +129,7 @@ grp10_package/CMakeFiles/panda_controller.dir/src/panda_controller.cpp.o
  /opt/ros/kinetic/include/moveit_msgs/SaveMap.h
  /opt/ros/kinetic/include/moveit_msgs/SaveMapRequest.h
  /opt/ros/kinetic/include/moveit_msgs/SaveMapResponse.h
+ /opt/ros/kinetic/include/moveit_msgs/TrajectoryConstraints.h
  /opt/ros/kinetic/include/moveit_msgs/VisibilityConstraint.h
  /opt/ros/kinetic/include/moveit_msgs/WorkspaceParameters.h
  /opt/ros/kinetic/include/moveit_visual_tools/moveit_visual_tools.h

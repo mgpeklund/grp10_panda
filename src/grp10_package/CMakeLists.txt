@@ -12,6 +12,8 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   moveit_core
   moveit_visual_tools
+  moveit_ros_planning_interface
+  moveit_msgs
   roscpp
   std_msgs
 )

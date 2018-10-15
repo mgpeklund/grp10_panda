@@ -30,6 +30,7 @@
 /home/robproj/grp10_ws/build/gtest/gtest/CMakeFiles/install/local.dir
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/edit_cache.dir
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/install/strip.dir
+/home/robproj/grp10_ws/build/grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/moveit_ros_planning_gencfg.dir
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/tf2_msgs_generate_messages_lisp.dir
@@ -118,3 +119,10 @@
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/sensor_msgs_generate_messages_lisp.dir
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/actionlib_generate_messages_cpp.dir
 /home/robproj/grp10_ws/build/grp10_package/CMakeFiles/sensor_msgs_generate_messages_py.dir
+/home/robproj/grp10_ws/build/panda_moveit_config/CMakeFiles/list_install_components.dir
+/home/robproj/grp10_ws/build/panda_moveit_config/CMakeFiles/install.dir
+/home/robproj/grp10_ws/build/panda_moveit_config/CMakeFiles/rebuild_cache.dir
+/home/robproj/grp10_ws/build/panda_moveit_config/CMakeFiles/install/strip.dir
+/home/robproj/grp10_ws/build/panda_moveit_config/CMakeFiles/install/local.dir
+/home/robproj/grp10_ws/build/panda_moveit_config/CMakeFiles/test.dir
+/home/robproj/grp10_ws/build/panda_moveit_config/CMakeFiles/edit_cache.dir

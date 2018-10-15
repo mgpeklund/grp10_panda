@@ -283,6 +283,19 @@ gtest_main/fast:
 .PHONY : gtest_main/fast
 
 #=============================================================================
+# Target rules for targets named moveit_ros_manipulation_gencfg
+
+# Build rule for target.
+moveit_ros_manipulation_gencfg: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 moveit_ros_manipulation_gencfg
+.PHONY : moveit_ros_manipulation_gencfg
+
+# fast build rule for target.
+moveit_ros_manipulation_gencfg/fast:
+	$(MAKE) -f grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/build.make grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/build
+.PHONY : moveit_ros_manipulation_gencfg/fast
+
+#=============================================================================
 # Target rules for targets named moveit_ros_planning_gencfg
 
 # Build rule for target.
@@ -1383,6 +1396,7 @@ help:
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... moveit_ros_manipulation_gencfg"
 	@echo "... moveit_ros_planning_gencfg"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"

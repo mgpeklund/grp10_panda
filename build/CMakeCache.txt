@@ -366,7 +366,7 @@ kdl_conversions_DIR:PATH=/opt/ros/kinetic/share/kdl_conversions/cmake
 kdl_parser_DIR:PATH=/opt/ros/kinetic/share/kdl_parser/cmake
 
 //Path to a library.
-lib:FILEPATH=/opt/ros/kinetic/lib/libinteractive_markers.so
+lib:FILEPATH=/opt/ros/kinetic/lib/libmoveit_move_group_capabilities_base.so
 
 //The directory containing a CMake configuration file for message_filters.
 message_filters_DIR:PATH=/opt/ros/kinetic/share/message_filters/cmake
@@ -383,14 +383,26 @@ moveit_core_DIR:PATH=/opt/ros/kinetic/share/moveit_core/cmake
 //The directory containing a CMake configuration file for moveit_msgs.
 moveit_msgs_DIR:PATH=/opt/ros/kinetic/share/moveit_msgs/cmake
 
+//The directory containing a CMake configuration file for moveit_ros_manipulation.
+moveit_ros_manipulation_DIR:PATH=/opt/ros/kinetic/share/moveit_ros_manipulation/cmake
+
+//The directory containing a CMake configuration file for moveit_ros_move_group.
+moveit_ros_move_group_DIR:PATH=/opt/ros/kinetic/share/moveit_ros_move_group/cmake
+
 //The directory containing a CMake configuration file for moveit_ros_perception.
 moveit_ros_perception_DIR:PATH=/opt/ros/kinetic/share/moveit_ros_perception/cmake
 
 //The directory containing a CMake configuration file for moveit_ros_planning.
 moveit_ros_planning_DIR:PATH=/opt/ros/kinetic/share/moveit_ros_planning/cmake
 
+//The directory containing a CMake configuration file for moveit_ros_planning_interface.
+moveit_ros_planning_interface_DIR:PATH=/opt/ros/kinetic/share/moveit_ros_planning_interface/cmake
+
 //The directory containing a CMake configuration file for moveit_ros_robot_interaction.
 moveit_ros_robot_interaction_DIR:PATH=/opt/ros/kinetic/share/moveit_ros_robot_interaction/cmake
+
+//The directory containing a CMake configuration file for moveit_ros_warehouse.
+moveit_ros_warehouse_DIR:PATH=/opt/ros/kinetic/share/moveit_ros_warehouse/cmake
 
 //The directory containing a CMake configuration file for moveit_visual_tools.
 moveit_visual_tools_DIR:PATH=/opt/ros/kinetic/share/moveit_visual_tools/cmake
@@ -400,6 +412,12 @@ object_recognition_msgs_DIR:PATH=/opt/ros/kinetic/share/object_recognition_msgs/
 
 //The directory containing a CMake configuration file for octomap_msgs.
 octomap_msgs_DIR:PATH=/opt/ros/kinetic/share/octomap_msgs/cmake
+
+//Value Computed by CMake
+panda_moveit_config_BINARY_DIR:STATIC=/home/robproj/grp10_ws/build/panda_moveit_config
+
+//Value Computed by CMake
+panda_moveit_config_SOURCE_DIR:STATIC=/home/robproj/grp10_ws/src/panda_moveit_config
 
 //The directory containing a CMake configuration file for pluginlib.
 pluginlib_DIR:PATH=/opt/ros/kinetic/share/pluginlib/cmake
@@ -484,6 +502,9 @@ urdfdom_py_DIR:PATH=/opt/ros/kinetic/share/urdfdom_py/cmake
 
 //The directory containing a CMake configuration file for visualization_msgs.
 visualization_msgs_DIR:PATH=/opt/ros/kinetic/share/visualization_msgs/cmake
+
+//The directory containing a CMake configuration file for warehouse_ros.
+warehouse_ros_DIR:PATH=/opt/ros/kinetic/share/warehouse_ros/cmake
 
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/kinetic/share/xmlrpcpp/cmake
@@ -590,7 +611,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

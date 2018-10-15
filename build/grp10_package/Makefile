@@ -166,6 +166,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/rule:
+	cd /home/robproj/grp10_ws/build && $(MAKE) -f CMakeFiles/Makefile2 grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/rule
+.PHONY : grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/rule
+
+# Convenience name for target.
+moveit_ros_manipulation_gencfg: grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/rule
+
+.PHONY : moveit_ros_manipulation_gencfg
+
+# fast build rule for target.
+moveit_ros_manipulation_gencfg/fast:
+	cd /home/robproj/grp10_ws/build && $(MAKE) -f grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/build.make grp10_package/CMakeFiles/moveit_ros_manipulation_gencfg.dir/build
+.PHONY : moveit_ros_manipulation_gencfg/fast
+
+# Convenience name for target.
 grp10_package/CMakeFiles/moveit_ros_planning_gencfg.dir/rule:
 	cd /home/robproj/grp10_ws/build && $(MAKE) -f CMakeFiles/Makefile2 grp10_package/CMakeFiles/moveit_ros_planning_gencfg.dir/rule
 .PHONY : grp10_package/CMakeFiles/moveit_ros_planning_gencfg.dir/rule
@@ -1445,6 +1460,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... install/strip"
+	@echo "... moveit_ros_manipulation_gencfg"
 	@echo "... moveit_ros_planning_gencfg"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
