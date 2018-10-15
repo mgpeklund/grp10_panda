@@ -1,0 +1,2 @@
+grp10_package
+-DCATKIN_DEVEL_PREFIX=/home/robproj/grp10_ws/devel -DCMAKE_INSTALL_PREFIX=/home/robproj/grp10_ws/install -G Unix Makefiles

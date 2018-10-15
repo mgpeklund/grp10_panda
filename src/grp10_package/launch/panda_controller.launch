@@ -1,0 +1,14 @@
+<launch>
+	<include file="$(find panda_moveit_config)/panda_controller.launch">
+		<arg name="load_robot_description" value="true"/>
+	</include>
+
+	<node name="panda_controller"
+		pkg="grp10_package"
+		type="panda_controller"
+		respawn="false" output="screen">
+
+		<rosparam command="load"
+			file="$(find panda_moveit_config)/config/kinematics.yaml"/>
+	</node>
+</launch>

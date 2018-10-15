@@ -1,0 +1,8 @@
+prefix=/home/robproj/grp10_ws/install
+
+Name: grp10_package
+Description: Description of grp10_package
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/robproj/grp10_ws/install/lib 
+Requires: 
