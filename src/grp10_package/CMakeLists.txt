@@ -209,5 +209,5 @@ target_link_libraries(panda_controller
 	${catkin_LIBRARIES}
 	${Boost_LIBRARIES}
 )
-install(TARGETS panda_controller DESTINATION launch)
+#:install(TARGETS panda_controller DESTINATION launch)
 

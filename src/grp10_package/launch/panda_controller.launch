@@ -1,5 +1,5 @@
 <launch>
-	<include file="$(find panda_moveit_config)/panda_controller.launch">
+	<include file="/home/robproj/grp10_ws/src/grp10_package/panda_moveit_config/launch/planning_context.launch">
 		<arg name="load_robot_description" value="true"/>
 	</include>
 
@@ -9,6 +9,6 @@
 		respawn="false" output="screen">
 
 		<rosparam command="load"
-			file="$(find panda_moveit_config)/config/kinematics.yaml"/>
+			file="/home/robproj/grp10_ws/src/grp10_package/panda_moveit_config/config/kinematics.yaml"/>
 	</node>
 </launch>
