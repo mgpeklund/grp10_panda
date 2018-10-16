@@ -1,4 +1,5 @@
 *.o
 *.swp
 *.swo
+*.dir
 devel/lib/grp10_package/*
