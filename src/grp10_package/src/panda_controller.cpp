@@ -32,6 +32,61 @@
 // TF2
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
+
+
+void addCollisionObjects(moveit::planning_interface::PlanningSceneInterface& planning_scene_interface)
+{
+  // BEGIN_SUB_TUTORIAL table1
+  //
+  // Creating Environment
+  // ^^^^^^^^^^^^^^^^^^^^
+  // Create vector to hold 3 collision objects.
+  std::vector<moveit_msgs::CollisionObject> collision_objects;
+  collision_objects.resize(1);
+
+  // BEGIN_SUB_TUTORIAL object
+  // Define the object that we will be manipulating
+  collision_objects[0].header.frame_id = "panda_link0";
+  collision_objects[0].id = "object";
+
+  /* Define the primitive and its dimensions. */
+  collision_objects[0].primitives.resize(1);
+  collision_objects[0].primitives[0].type = collision_objects[1].primitives[0].BOX;
+  collision_objects[0].primitives[0].dimensions.resize(3);
+  collision_objects[0].primitives[0].dimensions[0] = 0.02;
+  collision_objects[0].primitives[0].dimensions[1] = 0.03;
+  collision_objects[0].primitives[0].dimensions[2] = 0.1;
+
+  /* Define the pose of the object. */
+  collision_objects[0].primitive_poses.resize(1);
+  collision_objects[0].primitive_poses[0].position.x = 0.8;
+  collision_objects[0].primitive_poses[0].position.y = 0;
+  collision_objects[0].primitive_poses[0].position.z = 0.5;
+  // END_SUB_TUTORIAL
+
+  collision_objects[0].operation = collision_objects[0].ADD;
+
+  planning_scene_interface.applyCollisionObjects(collision_objects);
+}
+
+
+void openGripper(trajectory_msgs::JointTrajectory& posture)
+{
+  // BEGIN_SUB_TUTORIAL open_gripper
+  /* Add both finger joints of panda robot. */
+  posture.joint_names.resize(2);
+  posture.joint_names[0] = "panda_finger_joint1";
+  posture.joint_names[1] = "panda_finger_joint2";
+
+  /* Set them as open, wide enough for the object to fit. */
+  posture.points.resize(1);
+  posture.points[0].positions.resize(2);
+  posture.points[0].positions[0] = 0.04;
+  posture.points[0].positions[1] = 0.04;
+  posture.points[0].time_from_start = ros::Duration(0.5);
+  // END_SUB_TUTORIAL
+}
+
 int main(int argc, char **argv) {
 	
 	ros::init(argc, argv, "panda_controller");
@@ -50,6 +105,8 @@ int main(int argc, char **argv) {
   // We will use the :planning_scene_interface:`PlanningSceneInterface`
   // class to add and remove collision objects in our "virtual world" scene
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+  addCollisionObjects(planning_scene_interface);
 
   // Raw pointers are frequently used to refer to the planning group for improved performance.
   const robot_state::JointModelGroup* joint_model_group =
@@ -78,9 +135,9 @@ int main(int argc, char **argv) {
   tf2::Quaternion orientation;
   orientation.setRPY(-M_PI / 2, -M_PI / 4, -M_PI / 2);
 
-	pose.position.x = 0.3;
-	pose.position.y = 0.2;
-	pose.position.z = 0.75;
+	pose.position.x = 0.4;
+	pose.position.y = 0.0;
+	pose.position.z = 0.5;
 	pose.orientation = tf2::toMsg(orientation);
 
   move_group.setPoseTarget(pose);
@@ -100,11 +157,65 @@ int main(int argc, char **argv) {
   visual_tools.trigger();
   visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
 
+  move_group.move();
+
+  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");  
+
+  std::vector<moveit_msgs::Grasp> grasps;
+  grasps.resize(1);
+
+  // Setting grasp pose
+  // ++++++++++++++++++++++
+  // This is the pose of panda_link8. |br|
+  // From panda_link8 to the palm of the eef the distance is 0.058, the cube starts 0.01 before 5.0 (half of the length
+  // of the cube). |br|
+  // Therefore, the position for panda_link8 = 5 - (length of cube/2 - distance b/w panda_link8 and palm of eef - some
+  // extra padding)
+
+
+  grasps[0].grasp_pose.header.frame_id = "panda_link0";
+  orientation.setRPY(-M_PI / 2, -M_PI / 4, -M_PI / 2);
+  grasps[0].grasp_pose.pose.orientation = tf2::toMsg(orientation);
+  grasps[0].grasp_pose.pose.position.x = 0.5;
+  grasps[0].grasp_pose.pose.position.y = 0;
+  grasps[0].grasp_pose.pose.position.z = 0.2;
+
+
+  // Setting pre-grasp approach
+  // ++++++++++++++++++++++++++
+  /* Defined with respect to frame_id */
+  grasps[0].pre_grasp_approach.direction.header.frame_id = "panda_link0";
+  /* Direction is set as positive x axis */
+  grasps[0].pre_grasp_approach.direction.vector.x = 1.0;
+  grasps[0].pre_grasp_approach.min_distance = 0.095;
+  grasps[0].pre_grasp_approach.desired_distance = 0.115;
+
+  // Setting post-grasp retreat
+  // ++++++++++++++++++++++++++
+  /* Defined with respect to frame_id */
+  grasps[0].post_grasp_retreat.direction.header.frame_id = "panda_link0";
+  /* Direction is set as positive z axis */
+  grasps[0].post_grasp_retreat.direction.vector.z = 1.0;
+  grasps[0].post_grasp_retreat.min_distance = 0.1;
+  grasps[0].post_grasp_retreat.desired_distance = 0.25;
+
+  // Setting posture of eef before grasp
+  // +++++++++++++++++++++++++++++++++++
+  openGripper(grasps[0].pre_grasp_posture);
+
+ 
+  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
+
+  move_group.pick("object", grasps);
+
+
 
 	std::cout << "terminating node" << std::endl;
-
+  ros::waitForShutdown();
 	return 0;
 }
+
+
 
 
 
