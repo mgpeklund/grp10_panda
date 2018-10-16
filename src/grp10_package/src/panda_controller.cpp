@@ -28,7 +28,10 @@
 
 #include <moveit/kinematic_constraints/utils.h>
 #include <moveit_msgs/PlanningScene.h>
-/*
+
+// TF2
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+
 int main(int argc, char **argv) {
 	
 	ros::init(argc, argv, "panda_controller");
@@ -38,82 +41,74 @@ int main(int argc, char **argv) {
 
 	ros::NodeHandle node_handle;
 
+  static const std::string PLANNING_GROUP = "panda_arm";
+
+  // The :move_group_interface:`MoveGroup` class can be easily
+  // setup using just the name of the planning group you would like to control and plan for.
+  moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
+
+  // We will use the :planning_scene_interface:`PlanningSceneInterface`
+  // class to add and remove collision objects in our "virtual world" scene
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+  // Raw pointers are frequently used to refer to the planning group for improved performance.
+  const robot_state::JointModelGroup* joint_model_group =
+      move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
+
+/*
 	robot_model_loader::RobotModelLoader rml("robot_description");
 	robot_model::RobotModelPtr kinematic_model = rml.getModel();
 
 	planning_scene::PlanningScenePtr planning_scene(new planning_scene::PlanningScene(kinematic_model));
 
 	ROS_INFO("Model frame: %s", kinematic_model->getModelFrame().c_str());
-
+*/
 	moveit_visual_tools::MoveItVisualTools visual_tools("panda_link0");
 	visual_tools.deleteAllMarkers();
 	visual_tools.loadRemoteControl();
 	visual_tools.trigger();
-	ros::Duration(15).sleep();
+	ros::Duration(7).sleep();
 
 	visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window when the game starts");
 	
 	// Pose Goal
-	planning_interface::MotionPlanRequest req;
-	planning_interface::MotionPlanResponse res;
-	geometry_msgs::PoseStamped pose;
-	pose.header.frame_id = "panda_link0";
+	geometry_msgs::Pose pose;
 
 	//Random position and orientation
-	pose.pose.position.x = 0.3;
-	pose.pose.position.y = 0.0;
-	pose.pose.position.z = 0.75;
-	pose.pose.orientation.w = 1.0;
+  tf2::Quaternion orientation;
+  orientation.setRPY(-M_PI / 2, -M_PI / 4, -M_PI / 2);
+
+	pose.position.x = 0.3;
+	pose.position.y = 0.2;
+	pose.position.z = 0.75;
+	pose.orientation = tf2::toMsg(orientation);
+
+  move_group.setPoseTarget(pose);
 
 	std::vector<double> tolerance_pose(3, 0.01);
 	std::vector<double> tolerance_angle(3, 0.01);
 
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
-	req.group_name = "panda_arm";
-	moveit_msgs::Constraints pose_goal = kinematic_constraints::constructGoalConstraints("panda_link8", pose, tolerance_pose, tolerance_angle);
-	req.goal_constraints.push_back(pose_goal);
+  bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
-	if (res.error_code_.val != res.error_code_.SUCCESS)
-	{
-		ROS_ERROR("Could not compute plan successfully");
-		return 0;
-	}
-
-
-
-
-	// Visualize the result
-	ros::Publisher display_publisher = node_handle.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true);
-	moveit_msgs::DisplayTrajectory display_trajectory;
-
-	ROS_INFO("Visualizing the trajectory");
-	moveit_msgs::MotionPlanResponse response;
-	res.getMessage(response);
-
-	display_trajectory.trajectory_start = response.trajectory_start;
-	display_trajectory.trajectory.push_back(response.trajectory);
-	display_publisher.publish(display_trajectory);
-
-
-
-
-
-
-
-
-
-
-
+  // Visualizing plans
+  // ^^^^^^^^^^^^^^^^^
+  // We can also visualize the plan as a line with markers in RViz.
+//  visual_tools.publishAxisLabeled(pose, "pose");
+  visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  visual_tools.trigger();
+  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
 
 
 	std::cout << "terminating node" << std::endl;
 
 	return 0;
 }
-*/
 
 
-int main(int argc, char** argv)
+
+int inte_main(int argc, char** argv)
 {
   ros::init(argc, argv, "move_group_interface_tutorial");
   ros::NodeHandle node_handle;
