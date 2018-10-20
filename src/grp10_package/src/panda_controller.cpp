@@ -209,6 +209,42 @@ void place(moveit::planning_interface::MoveGroupInterface& move_group,
   move_group.place("object", place_location);
 }
 
+void cartesian_move(geometry_msgs::Pose goal_pose, double speed, 
+                    moveit::planning_interface::MoveGroupInterface& move_group,
+                    moveit_visual_tools::MoveItVisualTools& visual_tools){
+
+  std::vector<geometry_msgs::Pose> waypoints;
+  waypoints.push_back(goal_pose);
+
+  move_group.setMaxVelocityScalingFactor(speed);
+
+  moveit_msgs::RobotTrajectory trajectory;
+  // We want the Cartesian path to be interpolated at a resolution of 1 cm
+  // which is why we will specify 0.01 as the max step in Cartesian
+  // translation.  We will specify the jump threshold as 0.0, effectively disabling it.
+  // Warning - disabling the jump threshold while operating real hardware can cause
+  // large unpredictable motions of redundant joints and could be a safety issue
+  const double jump_threshold = 0;
+  const double eef_step = 0.01;
+
+  move_group.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+  visual_tools.trigger();
+
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+  my_plan.trajectory_ = trajectory;
+  move_group.execute(my_plan);
+}
+
+void move_to(geometry_msgs::Pose goal_pose, double speed, 
+                    moveit::planning_interface::MoveGroupInterface& move_group,
+                    moveit_visual_tools::MoveItVisualTools& visual_tools){
+    move_group.setPoseTarget(goal_pose);
+    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+    bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    visual_tools.trigger();
+    move_group.move();
+}
+
 int main(int argc, char **argv) {
 	
 	ros::init(argc, argv, "panda_controller");
@@ -229,50 +265,70 @@ int main(int argc, char **argv) {
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
   // Raw pointers are frequently used to refer to the planning group for improved performance.
-  const robot_state::JointModelGroup* joint_model_group =
-      move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
-  addCollisionObjects(planning_scene_interface);
+  //const robot_state::JointModelGroup* joint_model_group =
+  //    move_group.getCurrentState()->getJointModelGroup(PLANNING_GROUP);
+  //addCollisionObjects(planning_scene_interface);
 
-/*
 	robot_model_loader::RobotModelLoader rml("robot_description");
-	robot_model::RobotModelPtr kinematic_model = rml.getModel();
+	robot_model::RobotModelPtr robot_model_ptr = rml.getModel();
 
-	planning_scene::PlanningScenePtr planning_scene(new planning_scene::PlanningScene(kinematic_model));
+  robot_state::RobotStatePtr robot_state_ptr(new robot_state::RobotState(robot_model_ptr));
+  robot_state_ptr->setToDefaultValues();
+  const robot_state::JointModelGroup* joint_model_group = robot_model_ptr->getJointModelGroup("hand");
 
-	ROS_INFO("Model frame: %s", kinematic_model->getModelFrame().c_str());
-*/
+  const std::vector<std::string> &joint_names = joint_model_group->getJointModelNames();
+  
+  std::vector<double> joint_values;
+  robot_state_ptr->copyJointGroupPositions(joint_model_group, joint_values);
+  for(std::size_t i = 0; i < joint_names.size(); ++i)
+  {
+    ROS_INFO("Joint %s: %f", joint_names[i].c_str(), joint_values[i]);
+  }
 
-  move_group.setEndEffectorLink("panda_hand");
+  //move_group.setPoseReferenceFrame("hand_tool_frame");
+
+	planning_scene::PlanningScenePtr planning_scene(new planning_scene::PlanningScene(robot_model_ptr));
+
+	ROS_INFO("Model frame: %s", robot_model_ptr->getModelFrame().c_str());
+
+  move_group.setEndEffectorLink("hand_tool_frame");
+
 	moveit_visual_tools::MoveItVisualTools visual_tools("panda_link0");
 	visual_tools.deleteAllMarkers();
 	visual_tools.loadRemoteControl();
 	visual_tools.trigger();
 	ros::Duration(7).sleep();
 
+  /*
+  std::map<std::string,double> qz;
+  move_group.getNamedTargetValues("home");
+  move_group.setJointValueTarget(qz);
+*/
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+  bool success;// = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  
+  //move_group.execute(my_plan);
+
+
   tf2::Quaternion orientation;
-  orientation.setRPY(-M_PI / 2, -M_PI / 4, -M_PI / 2);
-
-
-	visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window when the game starts");
+  orientation.setRPY(0, M_PI/2 ,M_PI/2);
+	visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window when the game starts 1");
 	
 	// Pose Goal
 	geometry_msgs::Pose pose;
 
 	//Random position and orientation
   
-	pose.position.x = 0.3;
+	pose.position.x = 0.55;
 	pose.position.y = 0.0;
-	pose.position.z = 0.6;
-	pose.orientation = tf2::toMsg(orientation);
-
+	pose.position.z = 0.8;
+	//pose.orientation = tf2::toMsg(orientation);
+  pose.orientation.w = 1;
   move_group.setPoseTarget(pose);
-
+  success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 //	std::vector<double> tolerance_pose(3, 0.01);
 //	std::vector<double> tolerance_angle(3, 0.01);
 
-  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-
-  bool success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
   // Visualizing plans
   // ^^^^^^^^^^^^^^^^^
@@ -280,12 +336,12 @@ int main(int argc, char **argv) {
   visual_tools.publishAxisLabeled(pose, "pose");
   visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
   visual_tools.trigger();
-  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
+  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo 2");
 
   move_group.move();
 
-  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
-
+  visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo 3");
+/*
   orientation.setRPY(-M_PI, -M_PI / 4, -M_PI / 2);
 
 
@@ -311,7 +367,7 @@ int main(int argc, char **argv) {
   visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
 
   move_group.move();
-
+*/
 
 
 
@@ -341,12 +397,17 @@ int main(int argc, char **argv) {
   place(move_group, place_pose,orientation,place_approach_vector,place_retreat_vector,0.115,0.095,0.25,0.1);
 */
 
+  geometry_msgs::Pose pose_2 = pose;
+  
+  pose_2.position.x += 0.2;
+  orientation.setRPY(0,0,0);
+  pose_2.orientation = tf2::toMsg(orientation);
+  cartesian_move(pose_2, 0.1, move_group, visual_tools);
 
 	std::cout << "terminating node" << std::endl;
   ros::waitForShutdown();
 	return 0;
 }
-
 
 
 
